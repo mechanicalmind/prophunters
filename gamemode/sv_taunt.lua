@@ -9,7 +9,7 @@ concommand.Add("ph_taunt", function (ply, com, args, full)
 
 	if !ply:Alive() then return end
 
-	if ply.Taunting && ply.Taunting > CurTime() then
+	if ply.Taunting && ply.Taunting > CurTime() && !GAMEMODE.TauntOverlap:GetBool() then
 		return
 	end
 
@@ -52,7 +52,7 @@ concommand.Add("ph_taunt_random", function (ply, com, args, full)
 
 	if !ply:Alive() then return end
 
-	if ply.Taunting && ply.Taunting > CurTime() then
+	if ply.Taunting && ply.Taunting > CurTime() && !GAMEMODE.TauntOverlap:GetBool() then
 		return
 	end
 
@@ -64,6 +64,14 @@ concommand.Add("ph_taunt_random", function (ply, com, args, full)
 
 		if v.team && v.team != ply:Team() then
 			continue
+		end
+
+		if #args > 0 then
+			if args[1]:lower() == "short" then
+				if v.soundDuration > GAMEMODE.LongTaunt:GetInt() then
+					continue
+				end
+			end
 		end
 
 		table.insert(potential, v)
